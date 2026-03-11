@@ -119,3 +119,38 @@ def get_user(user_id):
             'created_at': user['created_at']
         }
     return None
+
+# ─────────────────────────────────────────
+# LOGIN
+# ─────────────────────────────────────────
+
+def login_user(email, password):
+    """
+    Full login flow:
+    1. Validate inputs
+    2. Check if user exists
+    3. Verify password
+    4. Return user data
+    """
+
+    # Step 1 - Validate inputs
+    errors = validate_login(email, password)
+    if errors:
+        return False, errors, None
+
+    # Step 2 - Check if user exists
+    user = get_user_by_email(email)
+    if not user:
+        return False, ["No account found with this email."], None
+
+    # Step 3 - Verify password
+    if not verify_password(password, user['password']):
+        return False, ["Incorrect password. Please try again."], None
+
+    # Step 4 - Return user data
+    user_data = {
+        'id': user['id'],
+        'username': user['username'],
+        'email': user['email']
+    }
+    return True, ["Login successful!"], user_data
