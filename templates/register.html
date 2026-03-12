@@ -1,34 +1,157 @@
 {% extends 'base.html' %}
+
+{% block title %}PFMS - Register{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+{% endblock %}
+
 {% block content %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-4">
-            <h3 class="text-center mb-4">Create Account</h3>
-            <form method="POST">
-                <div class="mb-3">
-                    <label>Username</label>
-                    <input type="text" name="username" class="form-control"
-                           value="{{ username or '' }}" required>
-                </div>
-                <div class="mb-3">
-                    <label>Email</label>
-                    <input type="email" name="email" class="form-control"
-                           value="{{ email or '' }}" required>
-                </div>
-                <div class="mb-3">
-                    <label>Password</label>
-                    <input type="password" name="password" class="form-control" required>
-                </div>
-                <div class="mb-3">
-                    <label>Confirm Password</label>
-                    <input type="password" name="confirm_password" class="form-control" required>
-                </div>
-                <button type="submit" class="btn btn-success w-100">Register</button>
-            </form>
-            <p class="text-center mt-3">
-                Already have an account? <a href="/login">Login</a>
-            </p>
+<div class="auth-wrapper">
+    <div class="auth-card">
+
+        <!-- Logo -->
+        <div class="auth-logo">
+            <div class="logo-icon">💰</div>
+            <h2>PFMS</h2>
+            <p>Create your free account</p>
         </div>
+
+        <!-- Register Form -->
+        <form method="POST" action="/register" id="registerForm">
+
+            <!-- Username -->
+            <div class="mb-3">
+                <label class="form-label">
+                    <i class="bi bi-person me-1"></i>Username
+                </label>
+                <input
+                    type="text"
+                    name="username"
+                    class="form-control"
+                    placeholder="Choose a username"
+                    value="{{ username or '' }}"
+                    required
+                    autofocus
+                >
+                <div class="input-hint">3–20 characters, letters and numbers only</div>
+            </div>
+
+            <!-- Email -->
+            <div class="mb-3">
+                <label class="form-label">
+                    <i class="bi bi-envelope me-1"></i>Email Address
+                </label>
+                <input
+                    type="email"
+                    name="email"
+                    class="form-control"
+                    placeholder="Enter your email"
+                    value="{{ email or '' }}"
+                    required
+                >
+            </div>
+
+            <!-- Password -->
+            <div class="mb-3">
+                <label class="form-label">
+                    <i class="bi bi-lock me-1"></i>Password
+                </label>
+                <div class="password-wrapper">
+                    <input
+                        type="password"
+                        name="password"
+                        id="registerPassword"
+                        class="form-control"
+                        placeholder="Min 6 characters"
+                        required
+                    >
+                    <button type="button" class="password-toggle" onclick="togglePassword('registerPassword', this)">
+                        <i class="bi bi-eye"></i>
+                    </button>
+                </div>
+                <div class="input-hint">At least 6 characters</div>
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="mb-4">
+                <label class="form-label">
+                    <i class="bi bi-lock-fill me-1"></i>Confirm Password
+                </label>
+                <div class="password-wrapper">
+                    <input
+                        type="password"
+                        name="confirm_password"
+                        id="confirmPassword"
+                        class="form-control"
+                        placeholder="Repeat your password"
+                        required
+                    >
+                    <button type="button" class="password-toggle" onclick="togglePassword('confirmPassword', this)">
+                        <i class="bi bi-eye"></i>
+                    </button>
+                </div>
+                <div id="passwordMatch" class="input-hint"></div>
+            </div>
+
+            <!-- Submit -->
+            <button type="submit" class="btn-auth">
+                <i class="bi bi-person-check me-2"></i>Create Account
+            </button>
+
+        </form>
+
+        <!-- Divider -->
+        <div class="auth-divider">
+            <span>Already have an account?</span>
+        </div>
+
+        <!-- Login Link -->
+        <div class="auth-footer">
+            <a href="/login">
+                <i class="bi bi-box-arrow-in-right me-1"></i>Login instead
+            </a>
+        </div>
+
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function togglePassword(inputId, btn) {
+        const input = document.getElementById(inputId);
+        const icon = btn.querySelector('i');
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.className = 'bi bi-eye-slash';
+        } else {
+            input.type = 'password';
+            icon.className = 'bi bi-eye';
+        }
+    }
+
+    // Live password match check
+    document.getElementById('confirmPassword').addEventListener('input', function () {
+        const password = document.getElementById('registerPassword').value;
+        const confirm = this.value;
+        const hint = document.getElementById('passwordMatch');
+        if (confirm === '') {
+            hint.textContent = '';
+        } else if (password === confirm) {
+            hint.textContent = '✅ Passwords match';
+            hint.style.color = '#a8e6b4';
+        } else {
+            hint.textContent = '❌ Passwords do not match';
+            hint.style.color = '#f5a0a8';
+        }
+    });
+
+    // Auto dismiss alerts after 4 seconds
+    setTimeout(() => {
+        document.querySelectorAll('.alert').forEach(alert => {
+            alert.classList.remove('show');
+        });
+    }, 4000);
+</script>
 {% endblock %}

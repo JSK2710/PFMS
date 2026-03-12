@@ -1,25 +1,103 @@
 {% extends 'base.html' %}
+
+{% block title %}PFMS - Login{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+{% endblock %}
+
 {% block content %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-4">
-            <h3 class="text-center mb-4">PFMS Login</h3>
-            <form method="POST">
-                <div class="mb-3">
-                    <label>Email</label>
-                    <input type="email" name="email" class="form-control"
-                           value="{{ email or '' }}" required>
-                </div>
-                <div class="mb-3">
-                    <label>Password</label>
-                    <input type="password" name="password" class="form-control" required>
-                </div>
-                <button type="submit" class="btn btn-primary w-100">Login</button>
-            </form>
-            <p class="text-center mt-3">
-                Don't have an account? <a href="/register">Register</a>
-            </p>
+<div class="auth-wrapper">
+    <div class="auth-card">
+
+        <!-- Logo -->
+        <div class="auth-logo">
+            <div class="logo-icon">💰</div>
+            <h2>PFMS</h2>
+            <p>Personal Finance Manager</p>
         </div>
+
+        <!-- Login Form -->
+        <form method="POST" action="/login" id="loginForm">
+
+            <!-- Email -->
+            <div class="mb-3">
+                <label class="form-label">
+                    <i class="bi bi-envelope me-1"></i>Email Address
+                </label>
+                <input
+                    type="email"
+                    name="email"
+                    class="form-control"
+                    placeholder="Enter your email"
+                    value="{{ email or '' }}"
+                    required
+                    autofocus
+                >
+            </div>
+
+            <!-- Password -->
+            <div class="mb-4">
+                <label class="form-label">
+                    <i class="bi bi-lock me-1"></i>Password
+                </label>
+                <div class="password-wrapper">
+                    <input
+                        type="password"
+                        name="password"
+                        id="loginPassword"
+                        class="form-control"
+                        placeholder="Enter your password"
+                        required
+                    >
+                    <button type="button" class="password-toggle" onclick="togglePassword('loginPassword', this)">
+                        <i class="bi bi-eye"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Submit -->
+            <button type="submit" class="btn-auth">
+                <i class="bi bi-box-arrow-in-right me-2"></i>Login
+            </button>
+
+        </form>
+
+        <!-- Divider -->
+        <div class="auth-divider">
+            <span>Don't have an account?</span>
+        </div>
+
+        <!-- Register Link -->
+        <div class="auth-footer">
+            <a href="/register">
+                <i class="bi bi-person-plus me-1"></i>Create a new account
+            </a>
+        </div>
+
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function togglePassword(inputId, btn) {
+        const input = document.getElementById(inputId);
+        const icon = btn.querySelector('i');
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.className = 'bi bi-eye-slash';
+        } else {
+            input.type = 'password';
+            icon.className = 'bi bi-eye';
+        }
+    }
+
+    // Auto dismiss alerts after 4 seconds
+    setTimeout(() => {
+        document.querySelectorAll('.alert').forEach(alert => {
+            alert.classList.remove('show');
+        });
+    }, 4000);
+</script>
 {% endblock %}
