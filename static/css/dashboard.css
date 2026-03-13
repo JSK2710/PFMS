@@ -1,0 +1,250 @@
+/* ─── General ─── */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #0f0f1a;
+    color: #e0e0e0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+}
+
+/* ─── Navbar ─── */
+.navbar {
+    background: rgba(255, 255, 255, 0.05) !important;
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 12px 0;
+}
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.4rem;
+    color: #4cc9f0 !important;
+    letter-spacing: 1px;
+}
+
+.nav-link {
+    color: rgba(255, 255, 255, 0.7) !important;
+    font-size: 0.9rem;
+    padding: 6px 14px !important;
+    border-radius: 8px;
+    transition: all 0.2s;
+}
+
+.nav-link:hover, .nav-link.active {
+    color: #ffffff !important;
+    background: rgba(76, 201, 240, 0.15);
+}
+
+.nav-link i {
+    margin-right: 6px;
+}
+
+/* ─── Page Container ─── */
+.page-container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+/* ─── Page Header ─── */
+.page-header {
+    margin-bottom: 30px;
+}
+
+.page-header h3 {
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 1.6rem;
+}
+
+.page-header p {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.9rem;
+    margin-top: 4px;
+}
+
+/* ─── Cards ─── */
+.glass-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 24px;
+}
+
+.glass-card h5 {
+    color: #ffffff;
+    font-weight: 600;
+    margin-bottom: 20px;
+    font-size: 1rem;
+}
+
+/* ─── Form Elements ─── */
+.form-label {
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: 6px;
+}
+
+.form-control, .form-select {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    color: #ffffff;
+    padding: 11px 14px;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #4cc9f0;
+    box-shadow: 0 0 0 3px rgba(76, 201, 240, 0.12);
+    color: #ffffff;
+    outline: none;
+}
+
+.form-control::placeholder {
+    color: rgba(255, 255, 255, 0.25);
+}
+
+.form-select option {
+    background: #1a1a2e;
+    color: #ffffff;
+}
+
+.input-hint {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.3);
+    margin-top: 4px;
+}
+
+/* ─── Buttons ─── */
+.btn-income {
+    background: linear-gradient(135deg, #06d6a0, #118ab2);
+    border: none;
+    border-radius: 10px;
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 11px 28px;
+    transition: all 0.3s ease;
+}
+
+.btn-income:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(6, 214, 160, 0.3);
+    color: #ffffff;
+}
+
+.btn-expense {
+    background: linear-gradient(135deg, #ef476f, #b5179e);
+    border: none;
+    border-radius: 10px;
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 11px 28px;
+    transition: all 0.3s ease;
+}
+
+.btn-expense:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(239, 71, 111, 0.3);
+    color: #ffffff;
+}
+
+.btn-outline-custom {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.85rem;
+    padding: 8px 16px;
+    transition: all 0.2s;
+}
+
+.btn-outline-custom:hover {
+    border-color: #4cc9f0;
+    color: #4cc9f0;
+}
+
+/* ─── Flash Messages ─── */
+.flash-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    width: 320px;
+}
+
+.alert {
+    border: none;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    animation: slideIn 0.3s ease;
+}
+
+.alert-success {
+    background: rgba(40, 167, 69, 0.2);
+    border-left: 4px solid #28a745;
+    color: #a8e6b4;
+}
+
+.alert-danger {
+    background: rgba(220, 53, 69, 0.2);
+    border-left: 4px solid #dc3545;
+    color: #f5a0a8;
+}
+
+.alert-warning {
+    background: rgba(255, 193, 7, 0.2);
+    border-left: 4px solid #ffc107;
+    color: #ffe08a;
+}
+
+.alert-info {
+    background: rgba(23, 162, 184, 0.2);
+    border-left: 4px solid #17a2b8;
+    color: #a8d8e8;
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(30px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+/* ─── Amount Input ─── */
+.amount-wrapper {
+    position: relative;
+}
+
+.amount-prefix {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 600;
+    font-size: 0.95rem;
+    pointer-events: none;
+}
+
+.amount-input {
+    padding-left: 32px !important;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 768px) {
+    .page-container {
+        margin: 20px auto;
+    }
+}

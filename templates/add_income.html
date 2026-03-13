@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+
+{% block title %}PFMS - Add Income{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+{% endblock %}
+
+{% block content %}
+{% include 'navbar.html' %}   ← make sure this line is here
+
+<div class="page-container">
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <h3><i class="bi bi-plus-circle me-2" style="color:#06d6a0"></i>Add Income</h3>
+        <p>Record your income transactions</p>
+    </div>
+
+    <!-- Add Income Form -->
+    <div class="glass-card">
+        <h5><i class="bi bi-cash-coin me-2"></i>Income Details</h5>
+        <form method="POST" action="/add-income">
+
+            <div class="row">
+                <!-- Amount -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Amount (₹) *</label>
+                    <div class="amount-wrapper">
+                        <span class="amount-prefix">₹</span>
+                        <input
+                            type="number"
+                            name="amount"
+                            class="form-control amount-input"
+                            placeholder="0.00"
+                            step="0.01"
+                            min="1"
+                            value="{{ form_data.amount if form_data else '' }}"
+                            required
+                        >
+                    </div>
+                </div>
+
+                <!-- Date -->
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Date *</label>
+                    <input
+                        type="date"
+                        name="date"
+                        class="form-control"
+                        value="{{ form_data.date if form_data else today }}"
+                        max="{{ today }}"
+                        required
+                    >
+                </div>
+            </div>
+
+            <!-- Category -->
+            <div class="mb-3">
+                <label class="form-label">Category *</label>
+                <select name="category_id" class="form-select" required>
+                    <option value="">-- Select Category --</option>
+                    {% for cat in categories %}
+                        <option value="{{ cat.id }}"
+                            {% if form_data and form_data.category_id == cat.id|string %}selected{% endif %}>
+                            {{ cat.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Note -->
+            <div class="mb-4">
+                <label class="form-label">Note <span class="opacity-50">(optional)</span></label>
+                <input
+                    type="text"
+                    name="note"
+                    class="form-control"
+                    placeholder="e.g. Monthly salary, freelance project..."
+                    maxlength="200"
+                    value="{{ form_data.note if form_data else '' }}"
+                >
+                <div class="input-hint">Max 200 characters</div>
+            </div>
+
+            <!-- Submit -->
+            <div class="d-flex gap-3">
+                <button type="submit" class="btn-income">
+                    <i class="bi bi-check-lg me-2"></i>Save Income
+                </button>
+                <a href="{{ url_for('dashboard.index') }}" class="btn-outline-custom">
+                    Cancel
+                </a>
+            </div>
+
+        </form>
+    </div>
+
+    <!-- Add Custom Category -->
+    <div class="glass-card">
+        <h5><i class="bi bi-tag me-2"></i>Add Custom Income Category</h5>
+        <form method="POST" action="/add-category">
+            <input type="hidden" name="type" value="income">
+            <div class="row align-items-end">
+                <div class="col-md-8 mb-3 mb-md-0">
+                    <label class="form-label">Category Name</label>
+                    <input
+                        type="text"
+                        name="name"
+                        class="form-control"
+                        placeholder="e.g. Rental Income, Dividends..."
+                        maxlength="30"
+                    >
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn-outline-custom w-100">
+                        <i class="bi bi-plus me-1"></i>Add Category
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Auto dismiss alerts
+    setTimeout(() => {
+        document.querySelectorAll('.alert').forEach(alert => {
+            alert.classList.remove('show');
+        });
+    }, 4000);
+</script>
+{% endblock %}
