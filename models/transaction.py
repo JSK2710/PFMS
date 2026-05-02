@@ -82,6 +82,37 @@ def add_income(user_id, category_id, amount, note, date):
 
 
 # ─────────────────────────────────────────
+# EXPENSE
+# ─────────────────────────────────────────
+
+def add_expense(user_id, category_id, amount, note, date):
+    """
+    Full expense transaction flow:
+    1. Validate inputs
+    2. Insert transaction
+    """
+
+    # Step 1 - Validate
+    errors = validate_transaction(amount, category_id, date, note)
+    if errors:
+        return False, errors
+
+    # Step 2 - Insert
+    try:
+        amount = float(amount)
+        insert_transaction(
+            user_id=user_id,
+            category_id=int(category_id),
+            amount=amount,
+            type='expense',
+            note=note.strip() if note else '',
+            date=date
+        )
+        return True, ["Expense added successfully! 💸"]
+    except Exception as e:
+        return False, [f"Failed to add expense: {str(e)}"]
+
+# ─────────────────────────────────────────
 # CATEGORIES
 # ─────────────────────────────────────────
 

@@ -2,7 +2,9 @@ from flask import Blueprint, render_template, request, redirect, url_for, sessio
 from routes.auth import login_required
 from models.transaction import (
     add_income,
+    add_expense,
     get_income_categories,
+    get_expense_categories,
     add_custom_category
 )
 from datetime import date
@@ -71,3 +73,43 @@ def add_category():
 
     # Redirect back to the page that made the request
     return redirect(request.referrer or url_for('transactions.add_income_route'))
+
+# ─────────────────────────────────────────
+# ADD EXPENSE
+# ─────────────────────────────────────────
+
+@transactions.route('/add-expense', methods=['GET', 'POST'])
+@login_required
+def add_expense_route():
+    user_id = session['user_id']
+    categories = get_expense_categories(user_id)
+    today = date.today().strftime('%Y-%m-%d')
+
+    if request.method == 'POST':
+        category_id = request.form.get('category_id')
+        amount = request.form.get('amount')
+        note = request.form.get('note', '')
+        date_input = request.form.get('date')
+
+        success, messages = add_expense(
+            user_id=user_id,
+            category_id=category_id,
+            amount=amount,
+            note=note,
+            date=date_input
+        )
+
+        if success:
+            flash(messages[0], "success")
+            return redirect(url_for('transactions.add_expense_route'))
+        else:
+            for msg in messages:
+                flash(msg, "danger")
+            return render_template('add_expense.html',
+                                   categories=categories,
+                                   today=today,
+                                   form_data=request.form)
+
+    return render_template('add_expense.html',
+                           categories=categories,
+                           today=today)

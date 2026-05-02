@@ -1,8 +1,28 @@
 {% extends 'base.html' %}
+
+{% block title %}PFMS - Dashboard{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+{% endblock %}
+
 {% block content %}
-<div class="container mt-5">
-    <h2>Welcome, {{ username }}! 👋</h2>
-    <p class="text-muted">Your dashboard is coming soon...</p>
-    <a href="/logout" class="btn btn-danger">Logout</a>
+{% include 'navbar.html' %}
+
+<div class="page-container">
+    <div class="page-header">
+        <h3>Welcome, {{ username }}! 👋</h3>
+        <p>Your financial dashboard is coming soon...</p>
+    </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    setTimeout(() => {
+        document.querySelectorAll('.alert').forEach(alert => {
+            alert.classList.remove('show');
+        });
+    }, 4000);
+</script>
 {% endblock %}

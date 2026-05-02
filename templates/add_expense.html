@@ -1,26 +1,26 @@
 {% extends 'base.html' %}
 
-{% block title %}PFMS - Add Income{% endblock %}
+{% block title %}PFMS - Add Expense{% endblock %}
 
 {% block styles %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
 {% endblock %}
 
 {% block content %}
-{% include 'navbar.html' %}   
+{% include 'navbar.html' %}
 
 <div class="page-container">
 
     <!-- Page Header -->
     <div class="page-header">
-        <h3><i class="bi bi-plus-circle me-2" style="color:#06d6a0"></i>Add Income</h3>
-        <p>Record your income transactions</p>
+        <h3><i class="bi bi-dash-circle me-2" style="color:#ef476f"></i>Add Expense</h3>
+        <p>Record your expense transactions</p>
     </div>
 
-    <!-- Add Income Form -->
+    <!-- Add Expense Form -->
     <div class="glass-card">
-        <h5><i class="bi bi-cash-coin me-2"></i>Income Details</h5>
-        <form method="POST" action="/add-income">
+        <h5><i class="bi bi-wallet2 me-2"></i>Expense Details</h5>
+        <form method="POST" action="/add-expense">
 
             <div class="row">
                 <!-- Amount -->
@@ -76,7 +76,7 @@
                     type="text"
                     name="note"
                     class="form-control"
-                    placeholder="e.g. Monthly salary, freelance project..."
+                    placeholder="e.g. Monthly rent, grocery shopping..."
                     maxlength="200"
                     value="{{ form_data.note if form_data else '' }}"
                 >
@@ -85,8 +85,8 @@
 
             <!-- Submit -->
             <div class="d-flex gap-3">
-                <button type="submit" class="btn-income">
-                    <i class="bi bi-check-lg me-2"></i>Save Income
+                <button type="submit" class="btn-expense">
+                    <i class="bi bi-check-lg me-2"></i>Save Expense
                 </button>
                 <a href="{{ url_for('dashboard.index') }}" class="btn-outline-custom">
                     Cancel
@@ -98,9 +98,9 @@
 
     <!-- Add Custom Category -->
     <div class="glass-card">
-        <h5><i class="bi bi-tag me-2"></i>Add Custom Income Category</h5>
+        <h5><i class="bi bi-tag me-2"></i>Add Custom Expense Category</h5>
         <form method="POST" action="/add-category">
-            <input type="hidden" name="type" value="income">
+            <input type="hidden" name="type" value="expense">
             <div class="row align-items-end">
                 <div class="col-md-8 mb-3 mb-md-0">
                     <label class="form-label">Category Name</label>
@@ -108,7 +108,7 @@
                         type="text"
                         name="name"
                         class="form-control"
-                        placeholder="e.g. Rental Income, Dividends..."
+                        placeholder="e.g. Pet Care, Subscriptions..."
                         maxlength="30"
                     >
                 </div>

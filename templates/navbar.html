@@ -20,6 +20,12 @@
                         <i class="bi bi-plus-circle"></i>Add Income
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.endpoint == 'transactions.add_expense_route' %}active{% endif %}"
+                       href="{{ url_for('transactions.add_expense_route') }}">
+                        <i class="bi bi-dash-circle"></i>Add Expense
+                    </a>
+                </li>
             </ul>
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
