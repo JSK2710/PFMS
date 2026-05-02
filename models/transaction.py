@@ -193,3 +193,36 @@ def get_monthly_data(user_id):
             monthly[month] = {'income': 0, 'expense': 0}
         monthly[month][row['type']] = round(row['total'], 2)
     return monthly
+
+# ─────────────────────────────────────────
+# UPDATE & DELETE
+# ─────────────────────────────────────────
+
+def delete_transaction_by_id(transaction_id, user_id):
+    """Delete a transaction by ID"""
+    from database.db_connection import delete_transaction
+    try:
+        delete_transaction(transaction_id, user_id)
+        return True, ["Transaction deleted successfully!"]
+    except Exception as e:
+        return False, [f"Failed to delete: {str(e)}"]
+
+def update_transaction_by_id(transaction_id, user_id, category_id, amount, type, note, date):
+    """Update a transaction by ID"""
+    from database.db_connection import update_transaction
+    errors = validate_transaction(amount, category_id, date, note)
+    if errors:
+        return False, errors
+    try:
+        update_transaction(
+            transaction_id=transaction_id,
+            user_id=user_id,
+            category_id=int(category_id),
+            amount=float(amount),
+            type=type,
+            note=note.strip() if note else '',
+            date=date
+        )
+        return True, ["Transaction updated successfully!"]
+    except Exception as e:
+        return False, [f"Failed to update: {str(e)}"]

@@ -26,6 +26,12 @@
                         <i class="bi bi-dash-circle"></i>Add Expense
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.endpoint == 'transactions.history' %}active{% endif %}"
+                       href="{{ url_for('transactions.history') }}">
+                        <i class="bi bi-clock-history"></i>History
+                    </a>
+                </li>
             </ul>
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
