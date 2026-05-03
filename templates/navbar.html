@@ -32,6 +32,12 @@
                         <i class="bi bi-clock-history"></i>History
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.endpoint == 'suggestions.suggestions' %}active{% endif %}"
+                       href="{{ url_for('suggestions.suggestions') }}">
+                        <i class="bi bi-lightbulb"></i>Suggestions
+                    </a>
+                </li>
             </ul>
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">

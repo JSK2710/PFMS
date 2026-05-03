@@ -1,0 +1,411 @@
+{% extends 'base.html' %}
+
+{% block title %}PFMS - Suggestions & Analysis{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+<style>
+    /* ─── Stats Grid ─── */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+
+    .stat-card {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 14px;
+        padding: 20px;
+        text-align: center;
+    }
+
+    .stat-card .stat-icon {
+        font-size: 1.8rem;
+        margin-bottom: 8px;
+    }
+
+    .stat-card .stat-label {
+        font-size: 0.78rem;
+        color: rgba(255, 255, 255, 0.45);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 6px;
+    }
+
+    .stat-card .stat-value {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #ffffff;
+    }
+
+    .stat-card .stat-sub {
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.3);
+        margin-top: 4px;
+    }
+
+    /* ─── Alerts ─── */
+    .alerts-section {
+        margin-bottom: 24px;
+    }
+
+    .section-title {
+        color: #ffffff;
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .alert-item {
+        border-radius: 12px;
+        padding: 16px 20px;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        border: none;
+    }
+
+    .alert-item.alert-danger {
+        background: rgba(220, 53, 69, 0.12);
+        border-left: 4px solid #dc3545;
+    }
+
+    .alert-item.alert-warning {
+        background: rgba(255, 193, 7, 0.12);
+        border-left: 4px solid #ffc107;
+    }
+
+    .alert-item.alert-success {
+        background: rgba(40, 167, 69, 0.12);
+        border-left: 4px solid #28a745;
+    }
+
+    .alert-item .alert-icon {
+        font-size: 1.3rem;
+        flex-shrink: 0;
+    }
+
+    .alert-item .alert-content .alert-title {
+        font-weight: 600;
+        font-size: 0.9rem;
+        margin-bottom: 4px;
+        color: #ffffff;
+    }
+
+    .alert-item .alert-content .alert-msg {
+        font-size: 0.83rem;
+        color: rgba(255, 255, 255, 0.6);
+        line-height: 1.5;
+    }
+
+    /* ─── Category Breakdown ─── */
+    .breakdown-card {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 14px;
+        padding: 24px;
+        margin-bottom: 24px;
+    }
+
+    .category-item {
+        margin-bottom: 14px;
+    }
+
+    .category-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .category-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 6px;
+    }
+
+    .category-name {
+        font-size: 0.88rem;
+        color: rgba(255, 255, 255, 0.8);
+        font-weight: 500;
+    }
+
+    .category-meta {
+        font-size: 0.82rem;
+        color: rgba(255, 255, 255, 0.45);
+    }
+
+    .progress-bar-wrapper {
+        height: 6px;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .progress-bar-fill {
+        height: 100%;
+        border-radius: 10px;
+        transition: width 0.8s ease;
+    }
+
+    /* ─── Suggestions ─── */
+    .suggestions-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+    }
+
+    .suggestion-card {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 14px;
+        padding: 20px;
+        transition: transform 0.2s;
+    }
+
+    .suggestion-card:hover {
+        transform: translateY(-3px);
+        border-color: rgba(76, 201, 240, 0.2);
+    }
+
+    .suggestion-card .s-icon {
+        font-size: 1.8rem;
+        margin-bottom: 10px;
+    }
+
+    .suggestion-card .s-title {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #ffffff;
+        margin-bottom: 8px;
+    }
+
+    .suggestion-card .s-message {
+        font-size: 0.82rem;
+        color: rgba(255, 255, 255, 0.5);
+        line-height: 1.6;
+    }
+
+    /* ─── Monthly Trends Table ─── */
+    .trends-card {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 14px;
+        padding: 24px;
+        margin-bottom: 24px;
+        overflow-x: auto;
+    }
+
+    .trends-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .trends-table th {
+        font-size: 0.78rem;
+        color: rgba(255, 255, 255, 0.45);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding: 10px 14px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        text-align: left;
+    }
+
+    .trends-table td {
+        font-size: 0.88rem;
+        color: rgba(255, 255, 255, 0.75);
+        padding: 12px 14px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .trends-table tr:last-child td {
+        border-bottom: none;
+    }
+
+    .trends-table .positive { color: #06d6a0; font-weight: 600; }
+    .trends-table .negative { color: #ef476f; font-weight: 600; }
+
+    /* ─── Empty State ─── */
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: rgba(255, 255, 255, 0.3);
+    }
+
+    .empty-state i {
+        font-size: 3rem;
+        margin-bottom: 16px;
+        display: block;
+    }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 768px) {
+        .stats-grid { grid-template-columns: 1fr; }
+        .suggestions-grid { grid-template-columns: 1fr; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+{% include 'navbar.html' %}
+
+<div class="page-container" style="max-width:1000px;">
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <h3><i class="bi bi-lightbulb me-2" style="color:#ffd166"></i>Suggestions & Analysis</h3>
+        <p>Personalized insights to optimize your finances</p>
+    </div>
+
+    {% if not analysis.has_data %}
+    <!-- Empty State -->
+    <div class="breakdown-card">
+        <div class="empty-state">
+            <i class="bi bi-bar-chart-line"></i>
+            <p>{{ analysis.message }}</p>
+            <a href="{{ url_for('transactions.add_income_route') }}"
+               class="filter-btn active mt-3" style="text-decoration:none;">
+                + Add Transaction
+            </a>
+        </div>
+    </div>
+
+    {% else %}
+
+    <!-- Stats Overview -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon">📊</div>
+            <div class="stat-label">Total Transactions</div>
+            <div class="stat-value">{{ analysis.total_transactions }}</div>
+            <div class="stat-sub">{{ analysis.income_count }} income · {{ analysis.expense_count }} expense</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">📅</div>
+            <div class="stat-label">Avg Daily Expense</div>
+            <div class="stat-value">₹{{ "{:,.2f}".format(analysis.avg_daily_expense) }}</div>
+            <div class="stat-sub">₹{{ "{:,.2f}".format(analysis.avg_monthly_expense) }} / month</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">🏆</div>
+            <div class="stat-label">Top Expense Category</div>
+            <div class="stat-value" style="font-size:1rem;">{{ analysis.top_category or 'None' }}</div>
+            <div class="stat-sub">
+                {% if analysis.top_category %}
+                    ₹{{ "{:,.2f}".format(analysis.top_category_amount) }} ({{ analysis.top_category_pct }}%)
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Alerts -->
+    {% if alerts %}
+    <div class="alerts-section">
+        <div class="section-title">
+            <i class="bi bi-bell" style="color:#ffd166"></i> Financial Alerts
+        </div>
+        {% for alert in alerts %}
+        <div class="alert-item alert-{{ alert.type }}">
+            <span class="alert-icon">{{ alert.icon }}</span>
+            <div class="alert-content">
+                <div class="alert-title">{{ alert.title }}</div>
+                <div class="alert-msg">{{ alert.message }}</div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Category Breakdown -->
+    {% if analysis.category_breakdown %}
+    <div class="breakdown-card">
+        <div class="section-title">
+            <i class="bi bi-pie-chart" style="color:#ef476f"></i> Expense Breakdown by Category
+        </div>
+        {% set colors = ['#ef476f', '#f78c6b', '#ffd166', '#06d6a0', '#4cc9f0',
+                         '#4361ee', '#b5179e', '#7209b7', '#560bad', '#480ca8'] %}
+        {% for item in analysis.category_breakdown %}
+        <div class="category-item">
+            <div class="category-header">
+                <span class="category-name">{{ item.category }}</span>
+                <span class="category-meta">
+                    ₹{{ "{:,.2f}".format(item.total) }} · {{ item.percentage }}%
+                </span>
+            </div>
+            <div class="progress-bar-wrapper">
+                <div class="progress-bar-fill"
+                     style="width: {{ item.percentage }}%;
+                            background: {{ colors[loop.index0 % colors|length] }};">
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Monthly Trends -->
+    {% if analysis.monthly_trends %}
+    <div class="trends-card">
+        <div class="section-title">
+            <i class="bi bi-graph-up" style="color:#4cc9f0"></i> Monthly Trends (Last 6 Months)
+        </div>
+        <table class="trends-table">
+            <thead>
+                <tr>
+                    <th>Month</th>
+                    <th>Income</th>
+                    <th>Expense</th>
+                    <th>Balance</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in analysis.monthly_trends %}
+                <tr>
+                    <td>{{ row.month }}</td>
+                    <td class="positive">₹{{ "{:,.2f}".format(row.income) }}</td>
+                    <td class="negative">₹{{ "{:,.2f}".format(row.expense) }}</td>
+                    <td class="{{ 'positive' if row.balance >= 0 else 'negative' }}">
+                        ₹{{ "{:,.2f}".format(row.balance) }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+
+    <!-- Budget Suggestions -->
+    {% if suggestions %}
+    <div class="section-title">
+        <i class="bi bi-lightbulb" style="color:#ffd166"></i> Budget Suggestions
+    </div>
+    <div class="suggestions-grid">
+        {% for s in suggestions %}
+        <div class="suggestion-card">
+            <div class="s-icon">{{ s.icon }}</div>
+            <div class="s-title">{{ s.title }}</div>
+            <div class="s-message">{{ s.message }}</div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% endif %}
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    setTimeout(() => {
+        document.querySelectorAll('.alert').forEach(alert => {
+            alert.classList.remove('show');
+        });
+    }, 4000);
+</script>
+{% endblock %}
