@@ -23,7 +23,7 @@ def init_db():
         )
     ''')
 
-    # Categories table
+    # Categories table in name should be unique 
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS categories (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
