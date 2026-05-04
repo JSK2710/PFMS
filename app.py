@@ -4,6 +4,7 @@ from routes.auth import auth
 from routes.dashboard import dashboard
 from routes.transactions import transactions
 from routes.suggestions import suggestions_bp
+from routes.reports import reports_bp
 
 app = Flask(__name__)
 app.secret_key = "pfms_secret_key"
@@ -16,6 +17,7 @@ app.register_blueprint(auth)
 app.register_blueprint(dashboard)
 app.register_blueprint(transactions)
 app.register_blueprint(suggestions_bp)
+app.register_blueprint(reports_bp)  
 
 # Redirect root to login
 @app.route('/')
