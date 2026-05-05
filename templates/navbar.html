@@ -58,3 +58,14 @@
         </div>
     </div>
 </nav>
+<script>
+    // Highlight active nav link based on current path
+    document.addEventListener('DOMContentLoaded', function() {
+        const currentPath = window.location.pathname;
+        document.querySelectorAll('.nav-link').forEach(link => {
+            if (link.getAttribute('href') === currentPath) {
+                link.classList.add('active');
+            }
+        });
+    });
+</script>

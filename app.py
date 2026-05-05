@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for
+from flask import Flask, redirect, url_for, render_template
 from database.db_connection import init_db
 from routes.auth import auth
 from routes.dashboard import dashboard
@@ -23,6 +23,10 @@ app.register_blueprint(reports_bp)
 @app.route('/')
 def home():
     return redirect(url_for('auth.login'))
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
 
 if __name__ == '__main__':
     app.run(debug=True)
